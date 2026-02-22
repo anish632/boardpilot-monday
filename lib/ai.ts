@@ -1,0 +1,54 @@
+import Groq from "groq-sdk";
+import { AnalysisResult } from "./analyze";
+import { BoardData } from "./monday";
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+async function chat(prompt: string): Promise<string> {
+  const res = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.3,
+    max_tokens: 1024,
+  });
+  return res.choices[0]?.message?.content ?? "";
+}
+
+export async function generateHealthSummary(board: BoardData, analysis: AnalysisResult): Promise<string> {
+  return chat(
+    `You are a project health analyst. Summarize this monday.com board health in 2-3 concise sentences.
+Board: "${board.name}"
+Health Score: ${analysis.healthScore}/100
+Total Items: ${analysis.totalItems}, Completed: ${analysis.completedItems}
+At Risk: ${analysis.atRiskItems}, Overdue: ${analysis.overdueItems}, Stuck: ${analysis.stuckItems}
+Unassigned: ${analysis.unassignedItems}, Stale (14+ days): ${analysis.staleItems}
+Be specific and actionable.`
+  );
+}
+
+export async function generateRiskReport(board: BoardData, analysis: AnalysisResult): Promise<string> {
+  const risks = [
+    ...analysis.overdueList.map((i) => `OVERDUE: "${i.name}" (${i.group.title})`),
+    ...analysis.stuckList.map((i) => `STUCK: "${i.name}" (${i.group.title})`),
+    ...analysis.unassignedList.map((i) => `UNASSIGNED: "${i.name}" (${i.group.title})`),
+    ...analysis.staleList.map((i) => `STALE: "${i.name}" (${i.group.title})`),
+  ].slice(0, 50);
+
+  return chat(
+    `You are a project risk analyst. Generate a concise risk report for board "${board.name}".
+Risks found:\n${risks.join("\n")}
+Group by risk type. Prioritize by severity. Suggest actions. Keep it under 500 words.`
+  );
+}
+
+export async function generateStatusReport(board: BoardData, analysis: AnalysisResult): Promise<string> {
+  return chat(
+    `You are a project manager. Generate a stakeholder-ready status report for monday.com board "${board.name}".
+Health Score: ${analysis.healthScore}/100
+Total: ${analysis.totalItems} items, ${analysis.completedItems} completed (${Math.round((analysis.completedItems / Math.max(analysis.totalItems, 1)) * 100)}%)
+At Risk: ${analysis.atRiskItems}, Overdue: ${analysis.overdueItems}, Stuck: ${analysis.stuckItems}
+Unassigned: ${analysis.unassignedItems}, Stale: ${analysis.staleItems}
+Groups: ${board.groups.map((g) => g.title).join(", ")}
+Format with sections: Executive Summary, Progress, Risks & Issues, Recommendations. Be professional and concise.`
+  );
+}

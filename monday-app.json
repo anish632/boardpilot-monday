@@ -1,0 +1,89 @@
+{
+  "name": "BoardPilot",
+  "description": "AI-powered project health analysis, status updates, and smart task prioritization for monday.com Sidekick.",
+  "longDescription": "BoardPilot brings AI project intelligence directly into monday.com Sidekick. Ask Sidekick to analyze your board's health, generate status updates, or prioritize tasks — and get instant, actionable insights powered by AI.\n\nThree skills:\n• Analyze Board Health — Score project health (0-100), identify bottlenecks, surface risk signals\n• Draft Status Update — AI-generated status update with done/in-progress/blocked/upcoming sections\n• Smart Prioritize — AI-ranked task list based on deadlines, blockers, and workload",
+  "features": [
+    {
+      "type": "SidekickSkill",
+      "name": "BoardPilot Skills",
+      "description": "AI project health analysis, status updates, and task prioritization",
+      "blocks": [
+        {
+          "type": "action",
+          "name": "Analyze Board Health",
+          "description": "Analyze a monday.com board to score project health (0-100), identify bottlenecks like overdue or stuck items, and surface risk signals with actionable recommendations. Use when a user asks about board health, project status, bottlenecks, risks, or overdue items.",
+          "runUrl": "/api/skills/analyze-health",
+          "inputFields": [
+            {
+              "key": "board",
+              "title": "Board",
+              "description": "The name or ID of the monday.com board to analyze",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "outputFields": [
+            { "key": "success", "type": "boolean" },
+            { "key": "boardName", "type": "string" },
+            { "key": "healthScore", "type": "number" },
+            { "key": "analysis", "type": "string" },
+            { "key": "error", "type": "string" }
+          ]
+        },
+        {
+          "type": "action",
+          "name": "Draft Status Update",
+          "description": "Generate a polished project status update from a monday.com board's data. Includes completed items, in-progress work, blockers, and upcoming tasks. Use when a user asks to draft, write, or generate a status update or project report.",
+          "runUrl": "/api/skills/draft-status",
+          "inputFields": [
+            {
+              "key": "board",
+              "title": "Board",
+              "description": "The name or ID of the monday.com board to generate a status update for",
+              "type": "string",
+              "required": true
+            },
+            {
+              "key": "audience",
+              "title": "Audience",
+              "description": "Who the status update is for: 'team' or 'stakeholders'. Defaults to team.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "outputFields": [
+            { "key": "success", "type": "boolean" },
+            { "key": "boardName", "type": "string" },
+            { "key": "statusUpdate", "type": "string" },
+            { "key": "error", "type": "string" }
+          ]
+        },
+        {
+          "type": "action",
+          "name": "Smart Prioritize Tasks",
+          "description": "Analyze active tasks on a monday.com board and recommend a priority ranking based on deadlines, blockers, assignee workload, and priority labels. Use when a user asks to prioritize, rank, or identify what to focus on next.",
+          "runUrl": "/api/skills/smart-prioritize",
+          "inputFields": [
+            {
+              "key": "board",
+              "title": "Board",
+              "description": "The name or ID of the monday.com board to prioritize tasks on",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "outputFields": [
+            { "key": "success", "type": "boolean" },
+            { "key": "boardName", "type": "string" },
+            { "key": "prioritization", "type": "string" },
+            { "key": "error", "type": "string" }
+          ]
+        }
+      ]
+    }
+  ],
+  "scopes": ["boards:read", "users:read"],
+  "supportEmail": "support@dasgroupllc.com",
+  "privacyUrl": "https://boardpilot-monday.vercel.app/privacy",
+  "termsUrl": "https://boardpilot-monday.vercel.app/terms"
+}
