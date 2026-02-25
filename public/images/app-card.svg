@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="592" height="348" viewBox="0 0 592 348">
+  <defs>
+    <linearGradient id="cardbg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#0a0a1a"/>
+    </linearGradient>
+  </defs>
+  <rect width="592" height="348" fill="url(#cardbg)"/>
+
+  <!-- Icon -->
+  <g transform="translate(40, 40)">
+    <rect width="48" height="48" rx="10" fill="#6161FF"/>
+    <circle cx="24" cy="22" r="12" fill="none" stroke="white" stroke-width="2.5"/>
+    <path d="M 12 22 A 12 12 0 1 1 33 30" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="24" y1="22" x2="31" y2="15" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="24" cy="22" r="2" fill="white"/>
+  </g>
+
+  <!-- Title -->
+  <text x="100" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="white">Board</text>
+  <text x="172" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#6161FF">Pilot</text>
+  <text x="100" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#888">AI Project Intelligence for monday.com Sidekick</text>
+
+  <!-- Three feature cards -->
+  <g transform="translate(40, 120)">
+    <!-- Health Score -->
+    <rect x="0" y="0" width="160" height="180" rx="12" fill="#ffffff08" stroke="#ffffff15" stroke-width="1"/>
+    <text x="20" y="35" font-size="28">&#x1FA7A;</text>
+    <text x="20" y="65" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="white">Health Score</text>
+    <text x="20" y="85" font-family="system-ui, sans-serif" font-size="11" fill="#888">Instant 0-100</text>
+    <text x="20" y="100" font-family="system-ui, sans-serif" font-size="11" fill="#888">board health rating</text>
+    <!-- Score example -->
+    <text x="20" y="145" font-family="system-ui, sans-serif" font-size="36" font-weight="700" fill="#6161FF">72</text>
+    <text x="68" y="145" font-family="system-ui, sans-serif" font-size="14" fill="#666">/100</text>
+  </g>
+
+  <g transform="translate(216, 120)">
+    <!-- Status Update -->
+    <rect x="0" y="0" width="160" height="180" rx="12" fill="#ffffff08" stroke="#ffffff15" stroke-width="1"/>
+    <text x="20" y="35" font-size="28">&#x1F4CA;</text>
+    <text x="20" y="65" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="white">Status Update</text>
+    <text x="20" y="85" font-family="system-ui, sans-serif" font-size="11" fill="#888">AI-generated project</text>
+    <text x="20" y="100" font-family="system-ui, sans-serif" font-size="11" fill="#888">reports in seconds</text>
+    <!-- Lines representing text -->
+    <rect x="20" y="120" width="120" height="4" rx="2" fill="#ffffff15"/>
+    <rect x="20" y="132" width="100" height="4" rx="2" fill="#ffffff10"/>
+    <rect x="20" y="144" width="110" height="4" rx="2" fill="#ffffff10"/>
+    <rect x="20" y="156" width="80" height="4" rx="2" fill="#ffffff10"/>
+  </g>
+
+  <g transform="translate(392, 120)">
+    <!-- Prioritize -->
+    <rect x="0" y="0" width="160" height="180" rx="12" fill="#ffffff08" stroke="#ffffff15" stroke-width="1"/>
+    <text x="20" y="35" font-size="28">&#x1F3AF;</text>
+    <text x="20" y="65" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="white">Prioritize</text>
+    <text x="20" y="85" font-family="system-ui, sans-serif" font-size="11" fill="#888">AI-ranked tasks by</text>
+    <text x="20" y="100" font-family="system-ui, sans-serif" font-size="11" fill="#888">urgency &amp; impact</text>
+    <!-- Priority items -->
+    <rect x="20" y="120" width="8" height="8" rx="2" fill="#ff4444"/>
+    <text x="34" y="128" font-family="system-ui, sans-serif" font-size="10" fill="#ccc">High priority</text>
+    <rect x="20" y="136" width="8" height="8" rx="2" fill="#ffaa00"/>
+    <text x="34" y="144" font-family="system-ui, sans-serif" font-size="10" fill="#ccc">Medium priority</text>
+    <rect x="20" y="152" width="8" height="8" rx="2" fill="#44bb44"/>
+    <text x="34" y="160" font-family="system-ui, sans-serif" font-size="10" fill="#ccc">Low priority</text>
+  </g>
+</svg>

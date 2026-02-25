@@ -24,6 +24,12 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <div className="pt-16 border-t border-gray-800/50 mt-12">
+          <div className="text-sm text-gray-500 space-y-2">
+            <div className="font-semibold text-gray-400">💎 BoardPilot Pro — Coming Soon</div>
+            <p className="text-xs">Advanced analytics, custom health metrics, and priority support.</p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="960" viewBox="0 0 1920 960">
+  <defs>
+    <linearGradient id="gbg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1e"/>
+      <stop offset="100%" style="stop-color:#0a0a14"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="960" fill="url(#gbg)"/>
+
+  <!-- Left side: Text content -->
+  <text x="120" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="white">Instant Board</text>
+  <text x="120" y="270" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#6161FF">Health Scores</text>
+  <text x="120" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#888">Know your project health at a glance with AI-powered</text>
+  <text x="120" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#888">analysis of overdue, stuck, and unassigned items.</text>
+
+  <!-- Score display -->
+  <g transform="translate(120, 420)">
+    <rect width="280" height="160" rx="16" fill="#ffffff08" stroke="#ffffff15" stroke-width="1"/>
+    <text x="30" y="50" font-family="system-ui, sans-serif" font-size="16" fill="#888">Health Score</text>
+    <text x="30" y="110" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="#6161FF">72</text>
+    <text x="120" y="110" font-family="system-ui, sans-serif" font-size="24" fill="#666">/100</text>
+  </g>
+
+  <g transform="translate(420, 420)">
+    <rect width="280" height="160" rx="16" fill="#ffffff08" stroke="#ffffff15" stroke-width="1"/>
+    <text x="30" y="50" font-family="system-ui, sans-serif" font-size="16" fill="#888">Items at Risk</text>
+    <text x="30" y="110" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="#ff6b6b">3</text>
+    <text x="65" y="110" font-family="system-ui, sans-serif" font-size="24" fill="#666">items</text>
+  </g>
+
+  <!-- Right side: Mock Sidekick panel -->
+  <g transform="translate(900, 80)">
+    <rect width="900" height="800" rx="20" fill="#1a1a2a" stroke="#ffffff10" stroke-width="1"/>
+
+    <!-- Sidekick header -->
+    <rect width="900" height="60" rx="20" fill="#222236"/>
+    <text x="30" y="38" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="white">AI Sidekick</text>
+
+    <!-- User message -->
+    <g transform="translate(400, 100)">
+      <rect x="0" y="0" width="460" height="44" rx="12" fill="#6161FF"/>
+      <text x="20" y="28" font-family="system-ui, sans-serif" font-size="14" fill="white">Analyze the health of this board</text>
+    </g>
+
+    <!-- Bot response -->
+    <g transform="translate(30, 170)">
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="white">Project Health Score: 72/100</text>
+
+      <text x="0" y="35" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#aaa">Key Findings:</text>
+
+      <!-- Table header -->
+      <rect x="0" y="55" width="800" height="32" rx="6" fill="#ffffff08"/>
+      <text x="15" y="76" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#888">Item Name</text>
+      <text x="200" y="76" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#888">Status</text>
+      <text x="360" y="76" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#888">Due Date</text>
+      <text x="500" y="76" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#888">Risk Level</text>
+
+      <!-- Row 1 -->
+      <rect x="0" y="90" width="800" height="32" rx="0" fill="none"/>
+      <text x="15" y="111" font-family="system-ui, sans-serif" font-size="12" fill="#ccc">Homepage Redesign</text>
+      <rect x="200" y="98" width="80" height="20" rx="4" fill="#fdab3d33"/>
+      <text x="212" y="112" font-family="system-ui, sans-serif" font-size="11" fill="#fdab3d">Working on it</text>
+      <text x="360" y="111" font-family="system-ui, sans-serif" font-size="12" fill="#ccc">Feb 26</text>
+      <rect x="500" y="98" width="60" height="20" rx="4" fill="#00c87533"/>
+      <text x="510" y="112" font-family="system-ui, sans-serif" font-size="11" fill="#00c875">Low</text>
+
+      <!-- Row 2 -->
+      <text x="15" y="143" font-family="system-ui, sans-serif" font-size="12" fill="#ccc">API Integration</text>
+      <rect x="200" y="130" width="50" height="20" rx="4" fill="#e2445c33"/>
+      <text x="212" y="144" font-family="system-ui, sans-serif" font-size="11" fill="#e2445c">Stuck</text>
+      <text x="360" y="143" font-family="system-ui, sans-serif" font-size="12" fill="#ccc">Feb 20</text>
+      <rect x="500" y="130" width="60" height="20" rx="4" fill="#e2445c33"/>
+      <text x="510" y="144" font-family="system-ui, sans-serif" font-size="11" fill="#e2445c">High</text>
+
+      <!-- Row 3 -->
+      <text x="15" y="175" font-family="system-ui, sans-serif" font-size="12" fill="#ccc">User Testing</text>
+      <rect x="200" y="162" width="80" height="20" rx="4" fill="#c4c4c433"/>
+      <text x="212" y="176" font-family="system-ui, sans-serif" font-size="11" fill="#c4c4c4">No status</text>
+      <text x="360" y="175" font-family="system-ui, sans-serif" font-size="12" fill="#ccc">Feb 23</text>
+      <rect x="500" y="162" width="60" height="20" rx="4" fill="#e2445c33"/>
+      <text x="510" y="176" font-family="system-ui, sans-serif" font-size="11" fill="#e2445c">High</text>
+
+      <!-- Recommendations -->
+      <text x="0" y="225" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#aaa">Recommendations:</text>
+      <text x="0" y="250" font-family="system-ui, sans-serif" font-size="12" fill="#888">1. Unblock API Integration - currently stuck and overdue</text>
+      <text x="0" y="272" font-family="system-ui, sans-serif" font-size="12" fill="#888">2. Set status for User Testing to clarify progress</text>
+      <text x="0" y="294" font-family="system-ui, sans-serif" font-size="12" fill="#888">3. Monitor Homepage Redesign as deadline approaches</text>
+    </g>
+  </g>
+
+  <!-- BoardPilot branding -->
+  <g transform="translate(120, 850)">
+    <rect width="40" height="40" rx="8" fill="#6161FF"/>
+    <circle cx="20" cy="18" r="10" fill="none" stroke="white" stroke-width="2"/>
+    <line x1="20" y1="18" x2="26" y2="12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="20" cy="18" r="2" fill="white"/>
+    <text x="52" y="30" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">Board<tspan fill="#6161FF">Pilot</tspan></text>
+  </g>
+</svg>

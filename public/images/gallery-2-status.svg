@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="960" viewBox="0 0 1920 960">
+  <defs>
+    <linearGradient id="gbg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1e"/>
+      <stop offset="100%" style="stop-color:#0a0a14"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="960" fill="url(#gbg2)"/>
+
+  <!-- Left side -->
+  <text x="120" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="white">AI-Generated</text>
+  <text x="120" y="270" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#6161FF">Status Updates</text>
+  <text x="120" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#888">Polished project reports in seconds. Choose between</text>
+  <text x="120" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#888">team-focused or stakeholder-ready tone.</text>
+
+  <!-- Feature bullets -->
+  <g transform="translate(120, 420)">
+    <circle cx="12" cy="12" r="12" fill="#6161FF33"/>
+    <text x="12" y="17" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#6161FF">&#x2713;</text>
+    <text x="36" y="17" font-family="system-ui, sans-serif" font-size="16" fill="#ccc">Executive summary with key metrics</text>
+
+    <circle cx="12" cy="52" r="12" fill="#6161FF33"/>
+    <text x="12" y="57" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#6161FF">&#x2713;</text>
+    <text x="36" y="57" font-family="system-ui, sans-serif" font-size="16" fill="#ccc">Progress, risks, and blockers breakdown</text>
+
+    <circle cx="12" cy="92" r="12" fill="#6161FF33"/>
+    <text x="12" y="97" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#6161FF">&#x2713;</text>
+    <text x="36" y="97" font-family="system-ui, sans-serif" font-size="16" fill="#ccc">Actionable recommendations included</text>
+
+    <circle cx="12" cy="132" r="12" fill="#6161FF33"/>
+    <text x="12" y="137" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#6161FF">&#x2713;</text>
+    <text x="36" y="137" font-family="system-ui, sans-serif" font-size="16" fill="#ccc">Save as monday.com Doc with one click</text>
+  </g>
+
+  <!-- Right side: Mock Sidekick -->
+  <g transform="translate(900, 80)">
+    <rect width="900" height="800" rx="20" fill="#1a1a2a" stroke="#ffffff10" stroke-width="1"/>
+    <rect width="900" height="60" rx="20" fill="#222236"/>
+    <text x="30" y="38" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="white">AI Sidekick</text>
+
+    <!-- User message -->
+    <g transform="translate(330, 100)">
+      <rect x="0" y="0" width="530" height="44" rx="12" fill="#6161FF"/>
+      <text x="20" y="28" font-family="system-ui, sans-serif" font-size="14" fill="white">Draft a status update for this board</text>
+    </g>
+
+    <!-- Bot response -->
+    <g transform="translate(30, 170)">
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white">Status Report — Sprint Board</text>
+
+      <text x="0" y="35" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#6161FF">Executive Summary</text>
+      <text x="0" y="58" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">The project is at 60% completion with a health score of</text>
+      <text x="0" y="76" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">72/100. Three items require immediate attention due to</text>
+      <text x="0" y="94" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">overdue deadlines and missing status updates.</text>
+
+      <text x="0" y="130" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#6161FF">Progress</text>
+      <text x="0" y="153" font-family="system-ui, sans-serif" font-size="12" fill="#00c875">&#x2022; Done: 3 items (API setup, DB migration, Auth flow)</text>
+      <text x="0" y="173" font-family="system-ui, sans-serif" font-size="12" fill="#fdab3d">&#x2022; In Progress: 2 items (Homepage, Dashboard)</text>
+      <text x="0" y="193" font-family="system-ui, sans-serif" font-size="12" fill="#e2445c">&#x2022; Blocked: 1 item (API Integration — stuck 5 days)</text>
+      <text x="0" y="213" font-family="system-ui, sans-serif" font-size="12" fill="#c4c4c4">&#x2022; Not Started: 2 items (User Testing, QA Review)</text>
+
+      <text x="0" y="250" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#6161FF">Risks &amp; Issues</text>
+      <text x="0" y="273" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">&#x2022; API Integration blocked for 5+ days — needs escalation</text>
+      <text x="0" y="293" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">&#x2022; 3 overdue items with no status assigned</text>
+      <text x="0" y="313" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">&#x2022; 2 items unassigned — risk of being missed</text>
+
+      <text x="0" y="350" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#6161FF">Recommendations</text>
+      <text x="0" y="373" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">1. Escalate API Integration blocker to engineering lead</text>
+      <text x="0" y="393" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">2. Assign owners to User Testing and QA Review</text>
+      <text x="0" y="413" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">3. Update status on all overdue items by end of day</text>
+
+      <!-- Save as Doc button -->
+      <rect x="0" y="445" width="120" height="32" rx="6" fill="#ffffff10" stroke="#ffffff20" stroke-width="1"/>
+      <text x="15" y="466" font-family="system-ui, sans-serif" font-size="12" fill="#aaa">Save as Doc</text>
+    </g>
+  </g>
+
+  <!-- Branding -->
+  <g transform="translate(120, 850)">
+    <rect width="40" height="40" rx="8" fill="#6161FF"/>
+    <circle cx="20" cy="18" r="10" fill="none" stroke="white" stroke-width="2"/>
+    <line x1="20" y1="18" x2="26" y2="12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="20" cy="18" r="2" fill="white"/>
+    <text x="52" y="30" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">Board<tspan fill="#6161FF">Pilot</tspan></text>
+  </g>
+</svg>

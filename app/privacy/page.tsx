@@ -20,14 +20,26 @@ export default function Privacy() {
           <p>We do <strong>not</strong> store any of your monday.com board data, items, or personal information. All data is processed in real-time and discarded after the response is generated.</p>
 
           <h2 className="text-white text-xl font-semibold mt-8">AI Processing</h2>
-          <p>Board data is sent to our AI provider (Groq) for analysis during skill execution. This data is processed in real-time and is not stored by the AI provider for training or any other purpose.</p>
+          <p>Board data is sent to our AI provider (Groq, using Meta Llama 3.3 70B) for analysis during skill execution. This data is processed in real-time and is not stored by the AI provider for training or any other purpose.</p>
+
+          <h2 className="text-white text-xl font-semibold mt-8">Cookies &amp; Tracking</h2>
+          <p>BoardPilot does not use cookies, analytics trackers, or any client-side tracking mechanisms.</p>
+
+          <h2 className="text-white text-xl font-semibold mt-8">Data Retention</h2>
+          <p>We retain no user data. Server logs (request metadata only, no board content) are automatically purged by our hosting provider within 30 days.</p>
 
           <h2 className="text-white text-xl font-semibold mt-8">Third-Party Services</h2>
           <ul className="list-disc pl-6 space-y-1">
-            <li><strong>monday.com</strong> — Platform provider</li>
-            <li><strong>Groq</strong> — AI inference provider</li>
-            <li><strong>Vercel</strong> — Application hosting</li>
+            <li><strong>monday.com</strong> — Platform provider (provides authentication and board data access)</li>
+            <li><strong>Groq</strong> — AI inference provider (processes board data for analysis; does not retain inputs)</li>
+            <li><strong>Vercel</strong> — Application hosting (US-based infrastructure)</li>
           </ul>
+
+          <h2 className="text-white text-xl font-semibold mt-8">Your Rights</h2>
+          <p>Since we do not store personal data, there is no data to access, correct, or delete. If you uninstall BoardPilot from your monday.com account, all access is immediately revoked.</p>
+
+          <h2 className="text-white text-xl font-semibold mt-8">Changes to This Policy</h2>
+          <p>We may update this policy from time to time. Material changes will be communicated through the monday.com marketplace listing.</p>
 
           <h2 className="text-white text-xl font-semibold mt-8">Contact</h2>
           <p>For questions about this policy, contact us at <a href="mailto:support@dasgroupllc.com" className="text-orange-400 hover:text-orange-300">support@dasgroupllc.com</a>.</p>

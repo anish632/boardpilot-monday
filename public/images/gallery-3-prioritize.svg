@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="960" viewBox="0 0 1920 960">
+  <defs>
+    <linearGradient id="gbg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1e"/>
+      <stop offset="100%" style="stop-color:#0a0a14"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="960" fill="url(#gbg3)"/>
+
+  <!-- Left side -->
+  <text x="120" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="white">Smart Task</text>
+  <text x="120" y="270" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#6161FF">Prioritization</text>
+  <text x="120" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#888">AI ranks your tasks by urgency considering deadlines,</text>
+  <text x="120" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#888">blockers, and workload balance.</text>
+
+  <!-- Priority tiers illustration -->
+  <g transform="translate(120, 420)">
+    <!-- High -->
+    <rect x="0" y="0" width="500" height="56" rx="10" fill="#e2445c15" stroke="#e2445c40" stroke-width="1"/>
+    <rect x="16" y="16" width="10" height="24" rx="3" fill="#e2445c"/>
+    <text x="40" y="34" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#e2445c">HIGH PRIORITY</text>
+    <text x="190" y="34" font-family="system-ui, sans-serif" font-size="13" fill="#888">Overdue &amp; blocked items</text>
+
+    <!-- Medium -->
+    <rect x="0" y="68" width="500" height="56" rx="10" fill="#fdab3d15" stroke="#fdab3d40" stroke-width="1"/>
+    <rect x="16" y="84" width="10" height="24" rx="3" fill="#fdab3d"/>
+    <text x="40" y="102" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#fdab3d">MEDIUM PRIORITY</text>
+    <text x="210" y="102" font-family="system-ui, sans-serif" font-size="13" fill="#888">Approaching deadlines</text>
+
+    <!-- Low -->
+    <rect x="0" y="136" width="500" height="56" rx="10" fill="#00c87515" stroke="#00c87540" stroke-width="1"/>
+    <rect x="16" y="152" width="10" height="24" rx="3" fill="#00c875"/>
+    <text x="40" y="170" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#00c875">LOW PRIORITY</text>
+    <text x="190" y="170" font-family="system-ui, sans-serif" font-size="13" fill="#888">On track, no blockers</text>
+  </g>
+
+  <!-- Right side: Mock Sidekick -->
+  <g transform="translate(900, 80)">
+    <rect width="900" height="800" rx="20" fill="#1a1a2a" stroke="#ffffff10" stroke-width="1"/>
+    <rect width="900" height="60" rx="20" fill="#222236"/>
+    <text x="30" y="38" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="white">AI Sidekick</text>
+
+    <!-- User message -->
+    <g transform="translate(370, 100)">
+      <rect x="0" y="0" width="490" height="44" rx="12" fill="#6161FF"/>
+      <text x="20" y="28" font-family="system-ui, sans-serif" font-size="14" fill="white">Prioritize tasks on this board</text>
+    </g>
+
+    <!-- Bot response -->
+    <g transform="translate(30, 170)">
+      <text x="0" y="0" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="white">Task Priority Ranking — Sprint Board</text>
+
+      <!-- High Priority -->
+      <text x="0" y="40" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#e2445c">High Priority</text>
+
+      <text x="0" y="65" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ccc">1. API Integration</text>
+      <text x="20" y="85" font-family="system-ui, sans-serif" font-size="12" fill="#888">Stuck for 5 days, overdue. Blocking downstream tasks.</text>
+
+      <text x="0" y="115" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ccc">2. User Testing</text>
+      <text x="20" y="135" font-family="system-ui, sans-serif" font-size="12" fill="#888">Overdue, no status set, unassigned. Needs immediate owner.</text>
+
+      <text x="0" y="165" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ccc">3. QA Review</text>
+      <text x="20" y="185" font-family="system-ui, sans-serif" font-size="12" fill="#888">Overdue, no status set. Cannot ship without QA sign-off.</text>
+
+      <!-- Medium Priority -->
+      <text x="0" y="225" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#fdab3d">Medium Priority</text>
+
+      <text x="0" y="250" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ccc">4. Homepage Redesign</text>
+      <text x="20" y="270" font-family="system-ui, sans-serif" font-size="12" fill="#888">Working on it, due tomorrow. On track but needs monitoring.</text>
+
+      <text x="0" y="300" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ccc">5. Dashboard Widgets</text>
+      <text x="20" y="320" font-family="system-ui, sans-serif" font-size="12" fill="#888">In progress, due next week. Moderate workload concern.</text>
+
+      <!-- Low Priority -->
+      <text x="0" y="360" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#00c875">Low Priority</text>
+
+      <text x="0" y="385" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ccc">6. Documentation Update</text>
+      <text x="20" y="405" font-family="system-ui, sans-serif" font-size="12" fill="#888">No deadline, no blockers. Can be scheduled after sprint.</text>
+
+      <!-- Action prompt -->
+      <text x="0" y="455" font-family="system-ui, sans-serif" font-size="13" fill="#aaa">Would you like to update statuses or assign owners?</text>
+    </g>
+  </g>
+
+  <!-- Branding -->
+  <g transform="translate(120, 850)">
+    <rect width="40" height="40" rx="8" fill="#6161FF"/>
+    <circle cx="20" cy="18" r="10" fill="none" stroke="white" stroke-width="2"/>
+    <line x1="20" y1="18" x2="26" y2="12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="20" cy="18" r="2" fill="white"/>
+    <text x="52" y="30" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="white">Board<tspan fill="#6161FF">Pilot</tspan></text>
+  </g>
+</svg>
