@@ -8,8 +8,8 @@ export async function parseRequest(req: NextRequest) {
   const payload = body.payload ?? body;
   const fields = payload?.inboundFieldValues ?? {};
   const boardId = fields.board;
-  const token = payload?.shortLivedToken;
-  if (!boardId || !token) throw new Error("Missing board or shortLivedToken");
+  const token = payload?.shortLivedToken || process.env.MONDAY_API_KEY;
+  if (!boardId || !token) throw new Error("Missing board or token");
   return { boardId: Number(boardId), token: String(token), fields };
 }
 
