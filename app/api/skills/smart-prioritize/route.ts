@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseRequest, getBoardAndAnalysis, errorResponse } from "@/lib/helpers";
-import { generatePrioritization } from "@/lib/ai";
+import { formatPrioritization } from "@/lib/format";
 
 export async function POST(req: NextRequest) {
   try {
     const { boardId, token } = await parseRequest(req);
     const { board, analysis } = await getBoardAndAnalysis(boardId, token);
-    const prioritization = await generatePrioritization(board, analysis);
+    const prioritization = formatPrioritization(board, analysis);
 
     return NextResponse.json({
       outputFields: {
