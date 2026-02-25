@@ -1,6 +1,6 @@
 import Groq from "groq-sdk";
 import { AnalysisResult } from "./analyze";
-import { BoardData } from "./monday";
+import { BoardData, BoardItem } from "./monday";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -8,81 +8,110 @@ async function chat(prompt: string): Promise<string> {
   const res = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [{ role: "user", content: prompt }],
-    temperature: 0.3,
-    max_tokens: 1024,
+    temperature: 0.1,
+    max_tokens: 800,
   });
   return res.choices[0]?.message?.content ?? "";
 }
 
+function itemLine(item: BoardItem): string {
+  const status = item.column_values.find(c => c.type === "color" || c.type === "status")?.text ?? "No status";
+  const due = item.column_values.find(c => c.type === "date" || c.id === "date" || c.id === "due_date")?.text ?? "No date";
+  const assignee = item.column_values.find(c => c.type === "multiple-person" || c.type === "person")?.text || "Unassigned";
+  return `"${item.name}" | Group: ${item.group.title} | Status: ${status} | Due: ${due} | Assignee: ${assignee}`;
+}
+
 export async function generateHealthSummary(board: BoardData, analysis: AnalysisResult): Promise<string> {
+  const items = board.items.map(itemLine).join("\n");
   return chat(
-    `You are a project health analyst. Summarize this monday.com board health in 2-3 concise sentences.
+    `Summarize this board's health in 2-3 sentences. ONLY reference items that appear in the data below. Do not invent or assume any items, dates, or people not listed.
+
 Board: "${board.name}"
 Health Score: ${analysis.healthScore}/100
-Total Items: ${analysis.totalItems}, Completed: ${analysis.completedItems}
-At Risk: ${analysis.atRiskItems}, Overdue: ${analysis.overdueItems}, Stuck: ${analysis.stuckItems}
-Unassigned: ${analysis.unassignedItems}, Stale (14+ days): ${analysis.staleItems}
-Be specific and actionable.`
+Total: ${analysis.totalItems} | Done: ${analysis.completedItems} | Overdue: ${analysis.overdueItems} | Stuck: ${analysis.stuckItems} | Unassigned: ${analysis.unassignedItems} | Stale: ${analysis.staleItems}
+
+All items:
+${items}
+
+Be specific — name the actual items that are at risk.`
   );
 }
 
 export async function generateRiskReport(board: BoardData, analysis: AnalysisResult): Promise<string> {
   const risks = [
-    ...analysis.overdueList.map((i) => `OVERDUE: "${i.name}" (${i.group.title})`),
-    ...analysis.stuckList.map((i) => `STUCK: "${i.name}" (${i.group.title})`),
-    ...analysis.unassignedList.map((i) => `UNASSIGNED: "${i.name}" (${i.group.title})`),
-    ...analysis.staleList.map((i) => `STALE: "${i.name}" (${i.group.title})`),
-  ].slice(0, 50);
+    ...analysis.overdueList.map(i => `OVERDUE: ${itemLine(i)}`),
+    ...analysis.stuckList.map(i => `STUCK: ${itemLine(i)}`),
+    ...analysis.unassignedList.map(i => `UNASSIGNED: ${itemLine(i)}`),
+    ...analysis.staleList.map(i => `STALE: ${itemLine(i)}`),
+  ];
+
+  if (risks.length === 0) return "No risks identified. All items are on track.";
 
   return chat(
-    `You are a project risk analyst. Generate a concise risk report for board "${board.name}".
-Risks found:\n${risks.join("\n")}
-Group by risk type. Prioritize by severity. Suggest actions. Keep it under 500 words.`
+    `Generate a concise risk report for board "${board.name}". ONLY reference the items listed below. Do not invent any items, dates, or people.
+
+Risk items:
+${risks.join("\n")}
+
+Group by risk type. Suggest one action per item. Keep it under 300 words.`
   );
 }
 
 export async function generatePrioritization(board: BoardData, analysis: AnalysisResult): Promise<string> {
-  const tasks = board.items
-    .filter((i) => {
-      const s = i.column_values
-        .find((c) => c.type === "color" || c.type === "status")
-        ?.text?.toLowerCase() ?? "";
+  const active = board.items
+    .filter(i => {
+      const s = i.column_values.find(c => c.type === "color" || c.type === "status")?.text?.toLowerCase() ?? "";
       return !s.includes("done") && !s.includes("complete");
     })
-    .slice(0, 50)
-    .map((i) => {
-      const status = i.column_values.find((c) => c.type === "color" || c.type === "status")?.text ?? "Unknown";
-      const due = i.column_values.find((c) => c.type === "date" || c.id === "date" || c.id === "due_date")?.text ?? "No due date";
-      const assignee = i.column_values.find((c) => c.type === "multiple-person" || c.type === "person")?.text ?? "Unassigned";
-      return `- "${i.name}" | Group: ${i.group.title} | Status: ${status} | Due: ${due} | Assignee: ${assignee}`;
-    });
+    .map(itemLine);
+
+  if (active.length === 0) return "All items are complete. Nothing to prioritize.";
 
   return chat(
-    `You are a project prioritization expert. Rank the following active tasks from board "${board.name}" by priority.
-Consider: approaching/past deadlines, stuck/blocked status, unassigned items, and workload balance.
+    `Rank these active tasks by priority. ONLY reference items listed below. Do not invent any items, dates, or people not in this list.
 
-Active tasks:
-${tasks.join("\n")}
+Board: "${board.name}"
+Stats: ${analysis.overdueItems} overdue, ${analysis.stuckItems} stuck, ${analysis.unassignedItems} unassigned
 
-Board stats: ${analysis.totalItems} total, ${analysis.completedItems} done, ${analysis.overdueItems} overdue, ${analysis.stuckItems} stuck, ${analysis.unassignedItems} unassigned.
+Active items:
+${active.join("\n")}
 
-Return a numbered priority list. For each task explain briefly why it's ranked there. Group into High/Medium/Low priority tiers. Keep it under 500 words.`
+Return a numbered list grouped into High/Medium/Low tiers. One sentence per item explaining why. Keep it under 300 words.`
   );
 }
 
 export async function generateStatusReport(board: BoardData, analysis: AnalysisResult, audience: string = "team"): Promise<string> {
+  const done = board.items.filter(i => {
+    const s = i.column_values.find(c => c.type === "color" || c.type === "status")?.text?.toLowerCase() ?? "";
+    return s.includes("done") || s.includes("complete");
+  }).map(i => `- ${i.name}`);
+
+  const inProgress = board.items.filter(i => {
+    const s = i.column_values.find(c => c.type === "color" || c.type === "status")?.text?.toLowerCase() ?? "";
+    return s.includes("working") || s.includes("progress");
+  }).map(i => `- ${i.name}`);
+
+  const stuck = analysis.stuckList.map(i => `- ${i.name}`);
+  const upcoming = board.items.filter(i => {
+    const s = i.column_values.find(c => c.type === "color" || c.type === "status")?.text?.toLowerCase() ?? "";
+    return !s || (!s.includes("done") && !s.includes("complete") && !s.includes("working") && !s.includes("progress") && !s.includes("stuck") && !s.includes("block"));
+  }).map(i => `- ${i.name}`);
+
   const tone = audience === "stakeholders"
-    ? "Write for executive stakeholders — focus on outcomes, risks, and decisions needed. Keep it high-level."
-    : "Write for the project team — include specifics on what's done, in-progress, blocked, and upcoming.";
+    ? "Write for executives — outcomes and decisions needed."
+    : "Write for the team — specifics on progress and blockers.";
 
   return chat(
-    `You are a project manager. Generate a status report for monday.com board "${board.name}".
-Audience: ${audience}. ${tone}
-Health Score: ${analysis.healthScore}/100
-Total: ${analysis.totalItems} items, ${analysis.completedItems} completed (${Math.round((analysis.completedItems / Math.max(analysis.totalItems, 1)) * 100)}%)
-At Risk: ${analysis.atRiskItems}, Overdue: ${analysis.overdueItems}, Stuck: ${analysis.stuckItems}
-Unassigned: ${analysis.unassignedItems}, Stale: ${analysis.staleItems}
-Groups: ${board.groups.map((g) => g.title).join(", ")}
-Format with sections: Executive Summary, Progress, Risks & Issues, Recommendations. Be professional and concise.`
+    `Generate a status report for board "${board.name}". ${tone}
+ONLY reference items listed below. Do not invent any items.
+
+Done: ${done.length > 0 ? done.join("\n") : "None"}
+In Progress: ${inProgress.length > 0 ? inProgress.join("\n") : "None"}
+Blocked: ${stuck.length > 0 ? stuck.join("\n") : "None"}
+Upcoming: ${upcoming.length > 0 ? upcoming.join("\n") : "None"}
+
+Health Score: ${analysis.healthScore}/100 | Completion: ${Math.round((analysis.completedItems / Math.max(analysis.totalItems, 1)) * 100)}%
+
+Format: Summary (2 sentences), then Done/In Progress/Blocked/Upcoming sections. Keep it under 250 words.`
   );
 }
