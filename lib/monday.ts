@@ -33,18 +33,33 @@ export async function fetchBoardData(boardId: number, token: string): Promise<Bo
     }
   }`;
 
-  const res = await fetch(MONDAY_API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: token },
-    body: JSON.stringify({ query, variables: { id: [boardId] } }),
-  });
+  // Try provided token first, fall back to API key
+  const tokens = [token, process.env.MONDAY_API_KEY].filter(Boolean) as string[];
+  let lastError = "";
 
-  if (!res.ok) throw new Error(`monday API error: ${res.status}`);
-  const json = await res.json();
-  if (json.errors) throw new Error(json.errors[0].message);
+  for (const t of tokens) {
+    const res = await fetch(MONDAY_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: t },
+      body: JSON.stringify({ query, variables: { id: [boardId] } }),
+    });
 
-  const board = json.data.boards[0];
-  if (!board) throw new Error("Board not found");
+    if (!res.ok) { lastError = `monday API error: ${res.status}`; continue; }
+    const json = await res.json();
+    if (json.errors) { lastError = json.errors[0].message; continue; }
+
+    const board = json.data.boards[0];
+    if (!board) { lastError = "Board not found"; continue; }
+
+    return {
+      name: board.name,
+      columns: board.columns,
+      groups: board.groups,
+      items: board.items_page.items,
+    };
+  }
+
+  throw new Error(lastError || "Failed to fetch board data");
 
   return {
     name: board.name,
