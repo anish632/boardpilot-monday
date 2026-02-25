@@ -60,11 +60,4 @@ export async function fetchBoardData(boardId: number, token: string): Promise<Bo
   }
 
   throw new Error(lastError || "Failed to fetch board data");
-
-  return {
-    name: board.name,
-    columns: board.columns,
-    groups: board.groups,
-    items: board.items_page.items,
-  };
 }
