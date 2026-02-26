@@ -1,6 +1,23 @@
 import { BoardData, BoardItem } from "./monday";
 import { AnalysisResult } from "./analyze";
 
+/** Format a date string like "2026-02-26" as a friendly relative label */
+function formatRelativeDate(dateStr: string): string {
+  if (!dateStr || dateStr === "No deadline") return dateStr;
+  const d = new Date(dateStr); // UTC midnight
+  if (isNaN(d.getTime())) return dateStr;
+  const n = new Date();
+  const today = new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()));
+  const diffDays = Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const base = dateStr; // keep original date
+  if (diffDays === 0) return `${base} (Today)`;
+  if (diffDays === 1) return `${base} (Tomorrow)`;
+  if (diffDays === -1) return `${base} (Yesterday)`;
+  if (diffDays < 0) return `${base} (${Math.abs(diffDays)} days overdue)`;
+  if (diffDays <= 7) return `${base} (in ${diffDays} days)`;
+  return base;
+}
+
 function getStatus(item: BoardItem): string {
   return item.column_values.find(c => c.type === "status" || c.type === "color")?.text || "Not set";
 }
@@ -32,7 +49,7 @@ export function formatHealthReport(board: BoardData, analysis: AnalysisResult): 
       if (analysis.overdueList.some(o => o.id === item.id)) flags.push("⚠️ OVERDUE");
       if (analysis.stuckList.some(o => o.id === item.id)) flags.push("🛑 STUCK");
       if (analysis.unassignedList.some(o => o.id === item.id)) flags.push("👤 Unassigned");
-      lines.push(`• ${item.name} — Status: ${status} | Due: ${date} | Owner: ${assignee}${flags.length ? " | " + flags.join(", ") : ""}`);
+      lines.push(`• ${item.name} — Status: ${status} | Due: ${formatRelativeDate(date)} | Owner: ${assignee}${flags.length ? " | " + flags.join(", ") : ""}`);
     }
     lines.push("");
   }
@@ -71,25 +88,25 @@ export function formatStatusReport(board: BoardData, analysis: AnalysisResult, a
 
   if (done.length) {
     lines.push("✅ **Completed**");
-    done.forEach(i => lines.push(`• ${i.name} (${getDate(i)})`));
+    done.forEach(i => lines.push(`• ${i.name} (${formatRelativeDate(getDate(i))})`));
     lines.push("");
   }
 
   if (inProgress.length) {
     lines.push("🔄 **In Progress**");
-    inProgress.forEach(i => lines.push(`• ${i.name} — Due: ${getDate(i)} | Owner: ${getAssignee(i)}`));
+    inProgress.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i))} | Owner: ${getAssignee(i)}`));
     lines.push("");
   }
 
   if (stuck.length) {
     lines.push("🛑 **Blocked**");
-    stuck.forEach(i => lines.push(`• ${i.name} — Due: ${getDate(i)} | Owner: ${getAssignee(i)}`));
+    stuck.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i))} | Owner: ${getAssignee(i)}`));
     lines.push("");
   }
 
   if (notStarted.length) {
     lines.push("📅 **Not Started**");
-    notStarted.forEach(i => lines.push(`• ${i.name} — Due: ${getDate(i)} | Owner: ${getAssignee(i)}`));
+    notStarted.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i))} | Owner: ${getAssignee(i)}`));
     lines.push("");
   }
 
@@ -105,7 +122,8 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
   if (active.length === 0) return "✅ All items are complete. Nothing to prioritize.";
 
   // Score items: overdue +3, stuck +3, no status +1, unassigned +1, sooner deadline +1
-  const now = new Date();
+  const n = new Date();
+  const now = new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()));
   const scored = active.map(item => {
     let score = 0;
     if (analysis.overdueList.some(o => o.id === item.id)) score += 3;
@@ -139,7 +157,7 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
       if (analysis.overdueList.some(o => o.id === s.item.id)) reasons.push("overdue");
       if (analysis.stuckList.some(o => o.id === s.item.id)) reasons.push("stuck");
       if (analysis.unassignedList.some(o => o.id === s.item.id)) reasons.push("unassigned");
-      lines.push(`${i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${getDate(s.item)} | Owner: ${getAssignee(s.item)}${reasons.length ? " (" + reasons.join(", ") + ")" : ""}`);
+      lines.push(`${i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item))} | Owner: ${getAssignee(s.item)}${reasons.length ? " (" + reasons.join(", ") + ")" : ""}`);
     });
     lines.push("");
   }
@@ -147,7 +165,7 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
   if (medium.length) {
     lines.push("🟡 **Medium Priority**");
     medium.forEach((s, i) => {
-      lines.push(`${high.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${getDate(s.item)} | Owner: ${getAssignee(s.item)}`);
+      lines.push(`${high.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item))} | Owner: ${getAssignee(s.item)}`);
     });
     lines.push("");
   }
@@ -155,7 +173,7 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
   if (low.length) {
     lines.push("🟢 **Low Priority**");
     low.forEach((s, i) => {
-      lines.push(`${high.length + medium.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${getDate(s.item)} | Owner: ${getAssignee(s.item)}`);
+      lines.push(`${high.length + medium.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item))} | Owner: ${getAssignee(s.item)}`);
     });
   }
 

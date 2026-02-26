@@ -46,8 +46,14 @@ function isAssigned(item: BoardItem): boolean {
   return !!pv.text;
 }
 
+/** Get today's date as a UTC-midnight Date (no time component) for fair comparison with monday.com date-only strings */
+function todayUTC(): Date {
+  const n = new Date();
+  return new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()));
+}
+
 export function analyzeBoard(data: BoardData): AnalysisResult {
-  const now = new Date();
+  const now = todayUTC();
   const staleThreshold = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
 
   const completed: BoardItem[] = [];
