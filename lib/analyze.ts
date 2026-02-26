@@ -46,14 +46,15 @@ function isAssigned(item: BoardItem): boolean {
   return !!pv.text;
 }
 
-/** Get today's date as a UTC-midnight Date (no time component) for fair comparison with monday.com date-only strings */
-function todayUTC(): Date {
-  const n = new Date();
-  return new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()));
+/** Get today's date in the user's timezone as a UTC-midnight Date for fair comparison with monday.com date-only strings ("2026-02-25" = UTC midnight) */
+function todayInTimezone(tz: string): Date {
+  // Get current date string in user's timezone, then parse as UTC midnight
+  const dateStr = new Date().toLocaleDateString("en-CA", { timeZone: tz }); // "2026-02-25" format
+  return new Date(dateStr + "T00:00:00Z");
 }
 
 export function analyzeBoard(data: BoardData): AnalysisResult {
-  const now = todayUTC();
+  const now = todayInTimezone(data.userTimezone || "UTC");
   const staleThreshold = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
 
   const completed: BoardItem[] = [];

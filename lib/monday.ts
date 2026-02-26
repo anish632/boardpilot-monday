@@ -3,6 +3,7 @@ export interface BoardData {
   columns: { id: string; title: string; type: string }[];
   groups: { id: string; title: string }[];
   items: BoardItem[];
+  userTimezone: string;
 }
 
 export interface BoardItem {
@@ -18,6 +19,7 @@ const MONDAY_API = "https://api.monday.com/v2";
 
 export async function fetchBoardData(boardId: number, token: string): Promise<BoardData> {
   const query = `query ($id: [ID!]!) {
+    me { time_zone_identifier }
     boards(ids: $id) {
       name
       columns { id title type }
@@ -51,11 +53,13 @@ export async function fetchBoardData(boardId: number, token: string): Promise<Bo
     const board = json.data.boards[0];
     if (!board) { lastError = "Board not found"; continue; }
 
+    const userTimezone = json.data.me?.time_zone_identifier || "UTC";
     return {
       name: board.name,
       columns: board.columns,
       groups: board.groups,
       items: board.items_page.items,
+      userTimezone,
     };
   }
 

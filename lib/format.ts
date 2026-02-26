@@ -1,15 +1,22 @@
 import { BoardData, BoardItem } from "./monday";
 import { AnalysisResult } from "./analyze";
 
-/** Format a date string like "2026-02-26" as a friendly relative label */
-function formatRelativeDate(dateStr: string): string {
+/** Get today's date in user's timezone as UTC-midnight Date */
+function todayInTimezone(tz: string): Date {
+  const dateStr = new Date().toLocaleDateString("en-CA", { timeZone: tz });
+  return new Date(dateStr + "T00:00:00Z");
+}
+
+/** Format a date string like "2026-02-26" as a friendly relative label.
+ *  Pass isComplete=true to suppress "overdue" labels for done items. */
+function formatRelativeDate(dateStr: string, tz: string, isComplete: boolean = false): string {
   if (!dateStr || dateStr === "No deadline") return dateStr;
-  const d = new Date(dateStr); // UTC midnight
+  const d = new Date(dateStr + "T00:00:00Z"); // Parse as UTC midnight
   if (isNaN(d.getTime())) return dateStr;
-  const n = new Date();
-  const today = new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()));
+  const today = todayInTimezone(tz);
   const diffDays = Math.round((d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  const base = dateStr; // keep original date
+  const base = dateStr;
+  if (isComplete) return base; // Don't add relative labels to completed items
   if (diffDays === 0) return `${base} (Today)`;
   if (diffDays === 1) return `${base} (Tomorrow)`;
   if (diffDays === -1) return `${base} (Yesterday)`;
@@ -22,6 +29,11 @@ function getStatus(item: BoardItem): string {
   return item.column_values.find(c => c.type === "status" || c.type === "color")?.text || "Not set";
 }
 
+function isItemComplete(item: BoardItem): boolean {
+  const s = getStatus(item).toLowerCase();
+  return s.includes("done") || s.includes("complete");
+}
+
 function getDate(item: BoardItem): string {
   return item.column_values.find(c => c.type === "date")?.text || "No deadline";
 }
@@ -32,6 +44,7 @@ function getAssignee(item: BoardItem): string {
 }
 
 export function formatHealthReport(board: BoardData, analysis: AnalysisResult): string {
+  const tz = board.userTimezone || "UTC";
   const lines: string[] = [];
   lines.push(`📊 Board Health Score: ${analysis.healthScore}/100`);
   lines.push(`Total: ${analysis.totalItems} items | Done: ${analysis.completedItems} | Overdue: ${analysis.overdueItems} | Stuck: ${analysis.stuckItems} | Unassigned: ${analysis.unassignedItems}`);
@@ -43,13 +56,14 @@ export function formatHealthReport(board: BoardData, analysis: AnalysisResult): 
     lines.push(`**${group.title}**`);
     for (const item of groupItems) {
       const status = getStatus(item);
+      const complete = isItemComplete(item);
       const date = getDate(item);
       const assignee = getAssignee(item);
       const flags: string[] = [];
       if (analysis.overdueList.some(o => o.id === item.id)) flags.push("⚠️ OVERDUE");
       if (analysis.stuckList.some(o => o.id === item.id)) flags.push("🛑 STUCK");
       if (analysis.unassignedList.some(o => o.id === item.id)) flags.push("👤 Unassigned");
-      lines.push(`• ${item.name} — Status: ${status} | Due: ${formatRelativeDate(date)} | Owner: ${assignee}${flags.length ? " | " + flags.join(", ") : ""}`);
+      lines.push(`• ${item.name} — Status: ${status} | Due: ${formatRelativeDate(date, tz, complete)} | Owner: ${assignee}${flags.length ? " | " + flags.join(", ") : ""}`);
     }
     lines.push("");
   }
@@ -64,15 +78,13 @@ export function formatHealthReport(board: BoardData, analysis: AnalysisResult): 
 }
 
 export function formatStatusReport(board: BoardData, analysis: AnalysisResult, audience: string): string {
+  const tz = board.userTimezone || "UTC";
   const lines: string[] = [];
   lines.push(`📋 Status Report — ${board.name}`);
   lines.push(`Health: ${analysis.healthScore}/100 | Completion: ${Math.round((analysis.completedItems / Math.max(analysis.totalItems, 1)) * 100)}%`);
   lines.push("");
 
-  const done = board.items.filter(i => {
-    const s = getStatus(i).toLowerCase();
-    return s.includes("done") || s.includes("complete");
-  });
+  const done = board.items.filter(i => isItemComplete(i));
   const inProgress = board.items.filter(i => {
     const s = getStatus(i).toLowerCase();
     return s.includes("working") || s.includes("progress");
@@ -88,25 +100,25 @@ export function formatStatusReport(board: BoardData, analysis: AnalysisResult, a
 
   if (done.length) {
     lines.push("✅ **Completed**");
-    done.forEach(i => lines.push(`• ${i.name} (${formatRelativeDate(getDate(i))})`));
+    done.forEach(i => lines.push(`• ${i.name} (${formatRelativeDate(getDate(i), tz, true)})`));
     lines.push("");
   }
 
   if (inProgress.length) {
     lines.push("🔄 **In Progress**");
-    inProgress.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i))} | Owner: ${getAssignee(i)}`));
+    inProgress.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i), tz)} | Owner: ${getAssignee(i)}`));
     lines.push("");
   }
 
   if (stuck.length) {
     lines.push("🛑 **Blocked**");
-    stuck.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i))} | Owner: ${getAssignee(i)}`));
+    stuck.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i), tz)} | Owner: ${getAssignee(i)}`));
     lines.push("");
   }
 
   if (notStarted.length) {
     lines.push("📅 **Not Started**");
-    notStarted.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i))} | Owner: ${getAssignee(i)}`));
+    notStarted.forEach(i => lines.push(`• ${i.name} — Due: ${formatRelativeDate(getDate(i), tz)} | Owner: ${getAssignee(i)}`));
     lines.push("");
   }
 
@@ -114,16 +126,13 @@ export function formatStatusReport(board: BoardData, analysis: AnalysisResult, a
 }
 
 export function formatPrioritization(board: BoardData, analysis: AnalysisResult): string {
-  const active = board.items.filter(i => {
-    const s = getStatus(i).toLowerCase();
-    return !s.includes("done") && !s.includes("complete");
-  });
+  const tz = board.userTimezone || "UTC";
+  const active = board.items.filter(i => !isItemComplete(i));
 
   if (active.length === 0) return "✅ All items are complete. Nothing to prioritize.";
 
   // Score items: overdue +3, stuck +3, no status +1, unassigned +1, sooner deadline +1
-  const n = new Date();
-  const now = new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()));
+  const now = todayInTimezone(tz);
   const scored = active.map(item => {
     let score = 0;
     if (analysis.overdueList.some(o => o.id === item.id)) score += 3;
@@ -132,7 +141,7 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
     if (getStatus(item) === "Not set") score += 1;
     const dateStr = item.column_values.find(c => c.type === "date")?.text;
     if (dateStr) {
-      const d = new Date(dateStr);
+      const d = new Date(dateStr + "T00:00:00Z");
       if (!isNaN(d.getTime()) && d < now) score += 2;
       else if (!isNaN(d.getTime())) {
         const daysOut = (d.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
@@ -157,7 +166,7 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
       if (analysis.overdueList.some(o => o.id === s.item.id)) reasons.push("overdue");
       if (analysis.stuckList.some(o => o.id === s.item.id)) reasons.push("stuck");
       if (analysis.unassignedList.some(o => o.id === s.item.id)) reasons.push("unassigned");
-      lines.push(`${i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item))} | Owner: ${getAssignee(s.item)}${reasons.length ? " (" + reasons.join(", ") + ")" : ""}`);
+      lines.push(`${i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item), tz)} | Owner: ${getAssignee(s.item)}${reasons.length ? " (" + reasons.join(", ") + ")" : ""}`);
     });
     lines.push("");
   }
@@ -165,7 +174,7 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
   if (medium.length) {
     lines.push("🟡 **Medium Priority**");
     medium.forEach((s, i) => {
-      lines.push(`${high.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item))} | Owner: ${getAssignee(s.item)}`);
+      lines.push(`${high.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item), tz)} | Owner: ${getAssignee(s.item)}`);
     });
     lines.push("");
   }
@@ -173,7 +182,7 @@ export function formatPrioritization(board: BoardData, analysis: AnalysisResult)
   if (low.length) {
     lines.push("🟢 **Low Priority**");
     low.forEach((s, i) => {
-      lines.push(`${high.length + medium.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item))} | Owner: ${getAssignee(s.item)}`);
+      lines.push(`${high.length + medium.length + i + 1}. ${s.item.name} — Status: ${getStatus(s.item)} | Due: ${formatRelativeDate(getDate(s.item), tz)} | Owner: ${getAssignee(s.item)}`);
     });
   }
 
